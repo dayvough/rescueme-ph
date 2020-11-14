@@ -49,7 +49,7 @@ export default function Home() {
                     authorities.
                   </p>
                 </div>
-                <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-1 sm:gap-3 sm:grid-flow-row-dense">
                   {/* <span class="flex w-full rounded-md shadow-sm sm:col-start-2">
                     <button
                       type="button"
