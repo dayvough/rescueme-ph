@@ -1,42 +1,25 @@
 import { useState } from "react";
 import { Formik } from "formik";
 
-function FormInput({ type, name, inputLabel }) {
-  return (
-    <div>
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium leading-5 text-gray-700"
-      >
-        {inputLabel}
-      </label>
-      <div className="mt-1 rounded-md shadow-sm">
-        {type !== "textarea" ? (
-          <input
-            id={name}
-            type={type}
-            required
-            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-          />
-        ) : (
-          <textarea
-            id={name}
-            required
-            rows={3}
-            className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-
 function ButtonClass(peopleCount, buttonCount) {
   if (peopleCount == buttonCount) {
     return "relative inline-flex items-center px-8 py-3 border border-gray-300 bg-indigo-600 text-sm leading-5 font-medium text-white hover:text-white focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150";
   } else {
     return "relative inline-flex items-center px-8 py-3 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150";
   }
+}
+
+async function SubmitForm(values) {
+  console.log(values);
+
+  const response = await fetch("/api/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(values),
+  });
+  const data = await response.json();
+
+  return data;
 }
 
 export default function RescueForm() {
@@ -67,25 +50,60 @@ export default function RescueForm() {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <Formik
             initialValues={initialValues}
-            onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-              }, 400);
+            onSubmit={async (values, { setSubmitting }) => {
+              values.number_of_people = peopleCount;
+              await SubmitForm(values);
+              setSubmitting(false);
             }}
           >
-            {({ handleSubmit, isSubmitting }) => (
+            {({
+              values,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+            }) => (
               <form onSubmit={handleSubmit}>
                 <div>
-                  <FormInput type="textarea" name="names" inputLabel="Names" />
+                  <label
+                    htmlFor="names"
+                    className="block text-sm font-medium leading-5 text-gray-700"
+                  >
+                    Names
+                  </label>
+                  <div className="mt-1 rounded-md shadow-sm">
+                    <textarea
+                      id="names"
+                      name="names"
+                      rows={3}
+                      value={values.names}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      required
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    />
+                  </div>
                 </div>
 
                 <div className="mt-4">
-                  <FormInput
-                    type="text"
-                    name="contact_numbers"
-                    inputLabel="Contact Number"
-                  />
+                  <label
+                    htmlFor="contact_number"
+                    className="block text-sm font-medium leading-5 text-gray-700"
+                  >
+                    Contact Number
+                  </label>
+                  <div className="mt-1 rounded-md shadow-sm">
+                    <input
+                      id="contact_number"
+                      name="contact_number"
+                      type="text"
+                      value={values.contact_number}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      required
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    />
+                  </div>
                 </div>
 
                 <div className="mt-4">
@@ -136,19 +154,45 @@ export default function RescueForm() {
                 </div>
 
                 <div className="mt-4">
-                  <FormInput
-                    type="textarea"
-                    name="address"
-                    inputLabel="Address"
-                  />
+                  <label
+                    htmlFor="address"
+                    className="block text-sm font-medium leading-5 text-gray-700"
+                  >
+                    Address
+                  </label>
+                  <div className="mt-1 rounded-md shadow-sm">
+                    <textarea
+                      id="address"
+                      name="address"
+                      rows={3}
+                      value={values.address}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      required
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    />
+                  </div>
                 </div>
 
                 <div className="mt-4">
-                  <FormInput
-                    type="textarea"
-                    name="remarks"
-                    inputLabel="Situation/Remarks"
-                  />
+                  <label
+                    htmlFor="remarks"
+                    className="block text-sm font-medium leading-5 text-gray-700"
+                  >
+                    Situation/Remarks
+                  </label>
+                  <div className="mt-1 rounded-md shadow-sm">
+                    <textarea
+                      id="remarks"
+                      name="remarks"
+                      rows={3}
+                      value={values.remarks}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      required
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    />
+                  </div>
                 </div>
 
                 <div className="mt-6">
