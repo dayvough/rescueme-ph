@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { Formik } from "formik";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 function ButtonClass(peopleCount, buttonCount) {
   if (peopleCount == buttonCount) {
@@ -24,6 +25,7 @@ async function SubmitForm(values) {
 
 export default function RescueForm() {
   const [peopleCount, setPeopleCount] = useState(1);
+  const router = useRouter();
 
   const initialValues = {
     names: "",
@@ -54,6 +56,7 @@ export default function RescueForm() {
               values.number_of_people = peopleCount;
               await SubmitForm(values);
               setSubmitting(false);
+              router.push("/success");
             }}
           >
             {({
